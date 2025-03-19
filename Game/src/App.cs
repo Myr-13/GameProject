@@ -34,6 +34,7 @@ public class App
 	{
 		_graphics.Create(new(640, 420), "Game");
 		_world.Init(_graphics);
+		Input.Graphics = _graphics;
 		
 		_graphics.NativeWindow.Closed += OnClose;
 		_graphics.NativeWindow.KeyPressed += Input.OnKeyPressed;
@@ -41,7 +42,7 @@ public class App
 		_graphics.OnUpdate += OnUpdate;
 		_graphics.OnRender += OnRender;
 		
-		Player entity = new(_world, new(0, 0));
+		Player entity = new(_world, new(64, 0));
 		_world.AddEntity(entity);
 		
 		_graphics.Open();

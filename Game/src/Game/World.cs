@@ -1,6 +1,8 @@
-﻿using Game.Engine;
+﻿using System.Diagnostics;
+using Game.Engine;
 using SFML.Graphics;
-using SFML.System;
+using DotTiled;
+using DotTiled.Serialization;
 
 namespace Game.Game;
 
@@ -16,21 +18,42 @@ public class World
 	{
 		Graphics = graphics;
 		
-		MapWidth = 10;
-		MapHeight = 10;
+		LoadMap("D:/1Code/csharp/GameProject/Tiled/unnamed.tmx");
+	}
+
+	public void LoadMap(string filePath)
+	{
+		Stopwatch sw = new Stopwatch();
+		sw.Start();
+		
+		var loader = Loader.Default();
+		var map = loader.LoadMap(filePath);
+		
+		MapWidth = (int)map.Width;
+		MapHeight = (int)map.Height;
 
 		Collision = new byte[MapWidth * MapHeight];
 		
-		for (int x = 0; x < MapWidth; x++)
+		foreach (BaseLayer layer in map.Layers)
 		{
-			for (int y = 0; y < MapHeight; y++)
+			if (layer.Name != "Collision")
+				continue;
+			
+			if (layer is TileLayer tileLayer)
 			{
-				if (y < 3)
-					continue;
-				
-				Collision[y * MapWidth + x] = 1;
+				for (int x = 0; x < MapWidth; x++)
+				{
+					for (int y = 0; y < MapHeight; y++)
+					{
+						int id = y * MapWidth + x;
+						Collision[id] = (byte)tileLayer.Data.Value.GlobalTileIDs.Value[id];
+					}
+				}
 			}
 		}
+		
+		sw.Stop();
+		Console.WriteLine($"Loaded map in {sw.ElapsedMilliseconds} ms");
 	}
 
 	public void Draw()
@@ -48,7 +71,7 @@ public class World
 				RectangleShape shape = new RectangleShape();
 				shape.Position = new(x * 32, y * 32);
 				shape.Size = new(32, 32);
-				shape.FillColor = Color.White;
+				shape.FillColor = SFML.Graphics.Color.White;
 
 				Graphics.NativeWindow.Draw(shape);
 			}

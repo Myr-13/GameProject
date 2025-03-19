@@ -1,0 +1,24 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "Все файлы (*)",
+    "fileStates": {
+    },
+    "last.exportedFilePath": "D:/1Code/csharp/GameProject/Tiled",
+    "last.imagePath": "D:/1Code/csharp/GameProject/Tiled",
+    "map.lastUsedExportFilter": "Lua файлы (*.lua)",
+    "map.lastUsedFormat": "tmx",
+    "map.renderOrder": "3",
+    "map.width": 50,
+    "openFiles": [
+    ],
+    "project": "Map.tiled-project",
+    "recentFiles": [
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

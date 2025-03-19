@@ -10,6 +10,7 @@ public class Vector(double x, double y)
 	public Vector() : this(0, 0) { }
 
 	public Vector(Vector2f a) : this(a.X, a.Y) { }
+	public Vector(Vector2i a) : this(a.X, a.Y) { }
 
 	public static Vector operator +(Vector a, Vector b) => new(a.X + b.X, a.Y + b.Y);
 	public static Vector operator -(Vector a, Vector b) => new(a.X - b.X, a.Y - b.Y);

@@ -1,9 +1,11 @@
-﻿using SFML.Window;
+﻿using SFML.System;
+using SFML.Window;
 
 namespace Game.Engine;
 
 public class Input
 {
+	public static Graphics Graphics;
 	private static readonly bool[] Keys = new bool[(int)Keyboard.Key.KeyCount];
 	private static bool[] _frameKeys = new bool[(int)Keyboard.Key.KeyCount];
 	
@@ -33,4 +35,5 @@ public class Input
 	
 	public static bool IsKeyPressing(Keyboard.Key key) => Keys[(int)key];
 	public static bool IsKeyPressed(Keyboard.Key key) => _frameKeys[(int)key];
+	public static Vector MousePosition() => new(Graphics.NativeWindow.MapPixelToCoords(Mouse.GetPosition(Graphics.NativeWindow)));
 }

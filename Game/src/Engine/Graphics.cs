@@ -12,7 +12,8 @@ public sealed class Graphics
 	public Camera Camera = new();
 	private readonly Clock _clock = new();
 	private Time _deltaTime;
-	private readonly float _frameTime = 1f / 60;
+	private const int Fps = 60;
+	private readonly float _frameTime = 1f / Fps;
 	
 	public delegate void WindowUpdateHandler(float deltaTime);
 	public event WindowUpdateHandler OnUpdate;
@@ -22,6 +23,7 @@ public sealed class Graphics
 	public void Create(VideoMode mode, string title)
 	{
 		NativeWindow = new(mode, title);
+		NativeWindow.SetFramerateLimit(Fps);
 		View.Size = new Vector2f(mode.Width, mode.Height);
 		View.Center = new Vector2f(0, 0);
 		Camera.Init(this);
