@@ -33,6 +33,7 @@ public class App
 	public void Run()
 	{
 		_window.Create(new(640, 420), "Game");
+		_world.Init();
 		
 		_window.NativeWindow.Closed += OnClose;
 		_window.NativeWindow.KeyPressed += Input.OnKeyPressed;
@@ -40,7 +41,7 @@ public class App
 		_window.OnUpdate += OnUpdate;
 		_window.OnRender += OnRender;
 		
-		Player entity = new(new(0, 0));
+		Player entity = new(_world, new(0, 0));
 		_world.AddEntity(entity);
 		
 		_window.Open();

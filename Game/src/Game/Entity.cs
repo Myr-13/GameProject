@@ -1,24 +1,20 @@
-using System.Numerics;
+using Game.Engine;
 using SFML.Graphics;
-using SFML.System;
 
 namespace Game.Game;
 
-public abstract class Entity
+public abstract class Entity(World world, Vector position, Vector size)
 {
+	protected World World = world;
+	
 	public int Health;
 	public int MaxHealth;
-	public bool Physics;
-	public Vector2f Position;
-	public Vector2f Velocity;
-	public Vector2f Size;
+	public Vector Position = position;
+	public Vector Velocity = new();
+	public Vector Size = size;
 
-	public Entity() { }
-
-	public Entity(Vector2f position, Vector2f size)
+	public Entity(World world) : this(world, new(0, 0), new(0, 0))
 	{
-		Position = position;
-		Size = size;
 	}
 	
 	public abstract void Update(float deltaTime);
