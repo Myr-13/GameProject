@@ -20,21 +20,18 @@ public class Player : Entity
 		Velocity.Y += 1F;
 		
 		if (Input.IsKeyPressing(Keyboard.Key.D))
-			Velocity.X = 30F;
+			Velocity.X = 5F;
 		if (Input.IsKeyPressing(Keyboard.Key.A))
-			Velocity.X = -30F;
+			Velocity.X = -5F;
+		Velocity.X *= 0.83F;
 
 		if (Input.IsKeyPressed(Keyboard.Key.Space))
-			Velocity.Y = -32F;
+			Velocity.Y = -10F;
 		
-		Console.WriteLine(Velocity);
+		Velocity *= deltaTime;
+		World.MoveBox(ref Position, ref Velocity, Size);
 		
-		Vector nextPosition = Position + Velocity * deltaTime + new Vector(0, Size.Y);
-		Vector checkPosition = Position + new Vector(Size.X / 2F, Size.Y);
-		World.IntersectFloor(checkPosition, nextPosition, out checkPosition);
-		Position = checkPosition - new Vector(Size.X / 2F, Size.Y);
-		
-		_shape.Position = Position;
+		_shape.Position = Position - Size / 2F;
 	}
 
 	public override void Draw(RenderWindow window)

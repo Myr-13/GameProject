@@ -91,9 +91,9 @@ public class World
 
 	public byte GetTile(double x, double y)
 	{
-		int x_ = Math.Clamp((int)Math.Floor(x / 32), 0, MapWidth);
-		int y_ = Math.Clamp((int)Math.Floor(y / 32), 0, MapHeight);
-		return Collision[y_ * MapWidth + x_];
+		int x2 = Math.Clamp((int)Math.Floor(x / 32), 0, MapWidth);
+		int y2 = Math.Clamp((int)Math.Floor(y / 32), 0, MapHeight);
+		return Collision[y2 * MapWidth + x2];
 	}
 
 	public bool TestBox(Vector position, Vector size)
@@ -125,11 +125,30 @@ public class World
 
 			if (TestBox(newPos, size))
 			{
+				int hits = 0;
+				
 				if (TestBox(new Vector(position.X, newPos.Y), size))
 				{
-					
+					newPos.Y = position.Y;
+					velocity.Y = 0;
+					hits++;
+				}
+
+				if (TestBox(new Vector(newPos.X, position.Y), size))
+				{
+					newPos.X = position.X;
+					velocity.X = 0;
+					hits++;
+				}
+
+				if (hits == 0)
+				{
+					newPos = position;
+					velocity = new Vector(0, 0);
 				}
 			}
+			
+			position = newPos;
 		}
 	}
 }
