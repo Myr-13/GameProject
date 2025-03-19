@@ -18,5 +18,5 @@ public abstract class Entity(World world, Vector position, Vector size)
 	}
 	
 	public abstract void Update(float deltaTime);
-	public abstract void Draw(RenderWindow window);
+	public abstract void Draw();
 }

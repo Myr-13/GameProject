@@ -1,12 +1,15 @@
-﻿using SFML.Graphics;
+﻿using Game.Game;
+using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
 namespace Game.Engine;
 
-public sealed class Window
+public sealed class Graphics
 {
 	public RenderWindow NativeWindow = new(0);
+	public View View = new();
+	public Camera Camera = new();
 	private readonly Clock _clock = new();
 	private Time _deltaTime;
 	private readonly float _frameTime = 1f / 60;
@@ -19,6 +22,9 @@ public sealed class Window
 	public void Create(VideoMode mode, string title)
 	{
 		NativeWindow = new(mode, title);
+		View.Size = new Vector2f(mode.Width, mode.Height);
+		View.Center = new Vector2f(0, 0);
+		Camera.Init(this);
 	}
 	
 	public void Open()
@@ -33,6 +39,7 @@ public sealed class Window
 			
 			OnUpdate(_deltaTime.AsSeconds());
 			
+			NativeWindow.SetView(View);
 			NativeWindow.Clear();
 			OnRender();
 			NativeWindow.Display();

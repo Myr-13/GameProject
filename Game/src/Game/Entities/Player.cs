@@ -28,14 +28,15 @@ public class Player : Entity
 		if (Input.IsKeyPressed(Keyboard.Key.Space))
 			Velocity.Y = -10F;
 		
-		Velocity *= deltaTime;
 		World.MoveBox(ref Position, ref Velocity, Size);
 		
 		_shape.Position = Position - Size / 2F;
 	}
 
-	public override void Draw(RenderWindow window)
+	public override void Draw()
 	{
-		window.Draw(_shape);
+		World.Graphics.NativeWindow.Draw(_shape);
+		World.Graphics.Camera.TargetPosition = Position;
+		World.Graphics.Camera.Render();
 	}
 }

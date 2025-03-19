@@ -8,7 +8,7 @@ namespace Game;
 public class App
 {
 	private World _world = new();
-	private Window _window = new();
+	private Graphics _graphics = new();
 	
 	private void OnClose(object? sender, EventArgs args)
 	{
@@ -27,23 +27,23 @@ public class App
 
 	private void OnRender()
 	{
-		_world.Draw(_window.NativeWindow);
+		_world.Draw();
 	}
 	
 	public void Run()
 	{
-		_window.Create(new(640, 420), "Game");
-		_world.Init();
+		_graphics.Create(new(640, 420), "Game");
+		_world.Init(_graphics);
 		
-		_window.NativeWindow.Closed += OnClose;
-		_window.NativeWindow.KeyPressed += Input.OnKeyPressed;
-		_window.NativeWindow.KeyReleased += Input.OnKeyReleased;
-		_window.OnUpdate += OnUpdate;
-		_window.OnRender += OnRender;
+		_graphics.NativeWindow.Closed += OnClose;
+		_graphics.NativeWindow.KeyPressed += Input.OnKeyPressed;
+		_graphics.NativeWindow.KeyReleased += Input.OnKeyReleased;
+		_graphics.OnUpdate += OnUpdate;
+		_graphics.OnRender += OnRender;
 		
 		Player entity = new(_world, new(0, 0));
 		_world.AddEntity(entity);
 		
-		_window.Open();
+		_graphics.Open();
 	}
 }

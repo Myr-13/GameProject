@@ -6,13 +6,16 @@ namespace Game.Game;
 
 public class World
 {
+	public Graphics Graphics;
 	public List<Entity> Entities = new();
 	public byte[] Collision = [];
 	public int MapWidth;
 	public int MapHeight;
 
-	public void Init()
+	public void Init(Graphics graphics)
 	{
+		Graphics = graphics;
+		
 		MapWidth = 10;
 		MapHeight = 10;
 
@@ -30,10 +33,10 @@ public class World
 		}
 	}
 
-	public void Draw(RenderWindow window)
+	public void Draw()
 	{
 		foreach (var entity in Entities)
-			entity.Draw(window);
+			entity.Draw();
 
 		for (int x = 0; x < MapWidth; x++)
 		{
@@ -47,7 +50,7 @@ public class World
 				shape.Size = new(32, 32);
 				shape.FillColor = Color.White;
 
-				window.Draw(shape);
+				Graphics.NativeWindow.Draw(shape);
 			}
 		}
 	}
@@ -91,8 +94,8 @@ public class World
 
 	public byte GetTile(double x, double y)
 	{
-		int x2 = Math.Clamp((int)Math.Floor(x / 32), 0, MapWidth);
-		int y2 = Math.Clamp((int)Math.Floor(y / 32), 0, MapHeight);
+		int x2 = Math.Clamp((int)Math.Floor(x / 32), 0, MapWidth - 1);
+		int y2 = Math.Clamp((int)Math.Floor(y / 32), 0, MapHeight - 1);
 		return Collision[y2 * MapWidth + x2];
 	}
 
