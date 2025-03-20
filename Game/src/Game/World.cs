@@ -18,7 +18,7 @@ public class World
 	{
 		Graphics = graphics;
 		
-		LoadMap("D:/1Code/csharp/GameProject/Tiled/unnamed.tmx");
+		LoadMap("C:\\Users\\Myr\\Desktop\\Code\\GameProject\\Tiled/unnamed.tmx");
 	}
 
 	public void LoadMap(string filePath)
@@ -91,7 +91,7 @@ public class World
 		Entities.Add(entity);
 	}
 
-	public void IntersectFloor(Vector positionIn, Vector positionOut, out Vector intersectPosition)
+	public int IntersectLine(Vector positionIn, Vector positionOut, out Vector intersectPosition)
 	{
 		double len = positionIn.Length();
 
@@ -100,14 +100,17 @@ public class World
 			double amount = i / len;
 			Vector checkPosition = Vector.Lerp(positionIn, positionOut, amount);
 
-			if (GetTile(checkPosition) != 0)
+			byte tile = GetTile(checkPosition);
+			if (tile != 0)
 			{
 				intersectPosition = checkPosition;
-				return;
+				return tile;
 			}
 		}
 
 		intersectPosition = positionOut;
+
+		return 0;
 	}
 	
 	public byte GetTile(Vector a)

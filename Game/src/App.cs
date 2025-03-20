@@ -44,7 +44,10 @@ public class App
 		
 		Player entity = new(_world, new(64, 0));
 		_world.AddEntity(entity);
-		
+
+		Enemy enemy = new(_world, new(64, 0));
+		_world.AddEntity(enemy);
+					
 		_graphics.Open();
 	}
 }

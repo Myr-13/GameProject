@@ -1,4 +1,5 @@
 ﻿using Game.Engine;
+using Game.Game.Entities.Projectiles;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -9,6 +10,7 @@ public class Player : Entity
 {
 	private readonly RectangleShape _shape;
 	private readonly RectangleShape[] _eyesShapes;
+	private int _jumpsCount = 1;
 	
 	public Player(World world, Vector position) : base(world, position, new Vector(32, 32))
 	{
@@ -28,20 +30,42 @@ public class Player : Entity
 			Velocity.X = 5F;
 		if (Input.IsKeyPressing(Keyboard.Key.A))
 			Velocity.X = -5F;
-		Velocity.X *= 0.83F;
 
-		if (Input.IsKeyPressed(Keyboard.Key.Space))
+		bool grounded =
+			World.IntersectLine(Position, Position + new Vector(Size.X / 2F, Size.Y / 2F + 4F), out Vector _) != 0 ||
+			World.IntersectLine(Position, Position + new Vector(-Size.X / 2F, Size.Y / 2F + 4F), out Vector _) != 0;
+		if (grounded)
+		{
+			_jumpsCount = 1;
+			Velocity.X *= 0.73F;
+		}
+		else
+		{
+			Velocity.X *= 0.95F;
+		}
+
+		if (Input.IsKeyPressed(Keyboard.Key.Space) && _jumpsCount > 0)
+		{
 			Velocity.Y = -10F;
-		
+			if (!grounded)
+				_jumpsCount--;
+		}
+
 		World.MoveBox(ref Position, ref Velocity, Size);
-		
-		_shape.Position = Position - Size / 2F;
+
+		if (Input.IsKeyPressed(Keyboard.Key.F))
+		{
+			Bullet bullet = new(World, Position);
+			World.AddEntity(bullet);
+		}
 	}
 
 	public override void Draw()
 	{
-		_eyesShapes[0].Position = Position - new Vector(2.5F, 5F) + (Input.MousePosition() - Position).Normalize() * 5F;
-		_eyesShapes[1].Position = Position - new Vector(2.5F, 5F) + (Input.MousePosition() - Position).Normalize() * 5F;
+		Vector centerPosition = Position - new Vector(2.5F, 5F) + (Input.MousePosition() - Position).Normalize() * 5F;
+		_eyesShapes[0].Position = centerPosition + new Vector(3.5F, 0F);
+		_eyesShapes[1].Position = centerPosition - new Vector(3.5F, 0F);
+		_shape.Position = Position - Size / 2F;
 		
 		World.Graphics.NativeWindow.Draw(_shape);
 		World.Graphics.NativeWindow.Draw(_eyesShapes[0]);
