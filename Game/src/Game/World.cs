@@ -18,7 +18,7 @@ public class World
 	{
 		Graphics = graphics;
 		
-		LoadMap("C:\\Users\\Myr\\Desktop\\Code\\GameProject\\Tiled/unnamed.tmx");
+		LoadMap("../../../../Tiled/unnamed.tmx");
 	}
 
 	public void LoadMap(string filePath)
@@ -80,15 +80,33 @@ public class World
 
 	public void Update(float deltaTime)
 	{
-		foreach (var entity in Entities)
+		foreach (Entity entity in Entities.ToList())
 		{
 			entity.Update(deltaTime);
+			
+			if (entity.MarkedForDeletion || entity.Health <= 0)
+				Entities.Remove(entity);
 		}
 	}
 	
 	public void AddEntity(Entity entity)
 	{
 		Entities.Add(entity);
+	}
+
+	public Entity? GetFirstEntityInRadius(Vector position, double radius, Type type)
+	{
+		foreach (var entity in Entities)
+		{
+			if (entity.GetType() != type)
+				continue;
+			
+			double dist = entity.Position.Distance(position);
+			if (dist < radius + entity.Size.X / 2F)
+				return entity;
+		}
+		
+		return null;
 	}
 
 	public int IntersectLine(Vector positionIn, Vector positionOut, out Vector intersectPosition)

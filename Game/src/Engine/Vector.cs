@@ -25,6 +25,8 @@ public class Vector(double x, double y)
 
 	public double Dot(Vector a) => X * a.X + Y * a.Y;
 	public double Length() => Math.Sqrt(Dot(this));
+	public double Distance(Vector a) => (this - a).Length();
+	public Vector Clone() => (Vector)MemberwiseClone();
 
 	public Vector Normalize()
 	{

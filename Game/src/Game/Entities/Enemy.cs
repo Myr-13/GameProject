@@ -6,12 +6,14 @@ namespace Game.Game.Entities;
 public class Enemy : Entity
 {
 	private readonly RectangleShape _shape;
+	private readonly Healbar _healbar;
 	
 	public Enemy(World world, Vector position) : base(world, position, new Vector(32, 32))
 	{
 		_shape = new RectangleShape(Size);
 		_shape.Position = position;
 		_shape.FillColor = Color.Red;
+		_healbar = new();
 	}
 	
 	public override void Update(float deltaTime)
@@ -24,5 +26,6 @@ public class Enemy : Entity
 	{
 		_shape.Position = Position - Size / 2F;
 		World.Graphics.NativeWindow.Draw(_shape);
+		_healbar.Draw(World.Graphics, Position - new Vector(0, Size.Y + 10F), Health, MaxHealth);
 	}
 }

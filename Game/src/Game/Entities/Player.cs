@@ -53,9 +53,11 @@ public class Player : Entity
 
 		World.MoveBox(ref Position, ref Velocity, Size);
 
+		// Shoot
+		Vector direction = (Input.MousePosition() - Position).Normalize();
 		if (Input.IsKeyPressed(Keyboard.Key.F))
 		{
-			Bullet bullet = new(World, Position);
+			Bullet bullet = new(World, Position, direction);
 			World.AddEntity(bullet);
 		}
 	}
