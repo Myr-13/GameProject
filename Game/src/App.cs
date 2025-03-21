@@ -1,15 +1,22 @@
-﻿using Game.Engine;
+﻿using System.Diagnostics;
+using System.Reflection;
+using Game.Engine;
 using Game.Game.Entities;
 using Game.Game;
+using Game.Game.Gfx.Particles;
 using SFML.Graphics;
 
 namespace Game;
 
 public class App
 {
-	private World _world = new();
-	private Graphics _graphics = new();
+	private readonly List<Component> _components = new();
+	public readonly World World = new();
+	public readonly Graphics Graphics = new();
 	
+	// Components
+	public ParticleManager ParticleManager;
+
 	private void OnClose(object? sender, EventArgs args)
 	{
 		if(sender == null)
@@ -21,33 +28,69 @@ public class App
 
 	private void OnUpdate(float deltaTime)
 	{
-		_world.Update(deltaTime);
+		World.Update(deltaTime);
 		Input.OnUpdate();
+
+		foreach (Component component in _components)
+		{
+			component.OnUpdate(deltaTime);
+		}
 	}
 
 	private void OnRender()
 	{
-		_world.Draw();
+		World.Draw();
+
+		foreach (Component component in _components)
+		{
+			component.OnDraw();
+		}
+	}
+
+	private void InitComponents()
+	{
+		var allComponents = Assembly.GetEntryAssembly()!.GetTypes()
+			.Where(t => t.IsSubclassOf(typeof(Component)) && t != typeof(Component));
+
+		Stopwatch sw = new();
+		
+		foreach (var componentType in allComponents)
+		{
+			sw.Restart();
+			
+			dynamic component = Activator.CreateInstance(componentType, this)!;
+			component.OnInit();
+			_components.Add(component);
+			GetType().GetFields().FirstOrDefault(p => p.FieldType == componentType)?.SetValue(this, component);
+			
+			sw.Stop();
+			Console.WriteLine($"Loaded component `{componentType.Name}` in {sw.ElapsedMilliseconds} ms");
+		}
 	}
 	
 	public void Run()
 	{
-		_graphics.Create(new(640, 420), "Game");
-		_world.Init(_graphics);
-		Input.Graphics = _graphics;
+		// Init base systems
+		Graphics.Create(new(640, 420), "Game");
+		World.Init(Graphics);
+		Input.Graphics = Graphics;
 		
-		_graphics.NativeWindow.Closed += OnClose;
-		_graphics.NativeWindow.KeyPressed += Input.OnKeyPressed;
-		_graphics.NativeWindow.KeyReleased += Input.OnKeyReleased;
-		_graphics.OnUpdate += OnUpdate;
-		_graphics.OnRender += OnRender;
+		// Init handlers
+		Graphics.NativeWindow.Closed += OnClose;
+		Graphics.NativeWindow.KeyPressed += Input.OnKeyPressed;
+		Graphics.NativeWindow.KeyReleased += Input.OnKeyReleased;
+		Graphics.OnUpdate += OnUpdate;
+		Graphics.OnRender += OnRender;
 		
-		Player entity = new(_world, new(64, 0));
-		_world.AddEntity(entity);
+		// Test
+		Player player = new(this, new(128, 0));
+		World.AddEntity(player);
 
-		Enemy enemy = new(_world, new(64, 0));
-		_world.AddEntity(enemy);
+		Enemy enemy = new(this, new(64, 0));
+		World.AddEntity(enemy);
+		
+		InitComponents();
 					
-		_graphics.Open();
+		Graphics.Open();
 	}
 }

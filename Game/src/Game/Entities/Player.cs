@@ -12,7 +12,7 @@ public class Player : Entity
 	private readonly RectangleShape[] _eyesShapes;
 	private int _jumpsCount = 1;
 	
-	public Player(World world, Vector position) : base(world, position, new Vector(32, 32))
+	public Player(App app, Vector position) : base(app, position, new Vector(32, 32))
 	{
 		_shape = new RectangleShape(Size);
 		_eyesShapes = [ new RectangleShape(new Vector2f(5, 10)), new RectangleShape(new Vector2f(5, 10)) ];
@@ -22,7 +22,7 @@ public class Player : Entity
 		_eyesShapes[1].FillColor = Color.Black;
 	}
 	
-	public override void Update(float deltaTime)
+	public override void OnUpdate(float deltaTime)
 	{
 		Velocity.Y += 0.75F;
 		
@@ -57,12 +57,12 @@ public class Player : Entity
 		Vector direction = (Input.MousePosition() - Position).Normalize();
 		if (Input.IsKeyPressed(Keyboard.Key.F))
 		{
-			Bullet bullet = new(World, Position, direction);
+			Bullet bullet = new(App, Position, direction);
 			World.AddEntity(bullet);
 		}
 	}
 
-	public override void Draw()
+	public override void OnDraw()
 	{
 		Vector centerPosition = Position - new Vector(2.5F, 5F) + (Input.MousePosition() - Position).Normalize() * 5F;
 		_eyesShapes[0].Position = centerPosition + new Vector(3.5F, 0F);

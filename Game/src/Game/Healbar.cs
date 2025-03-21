@@ -4,7 +4,7 @@ using SFML.System;
 
 namespace Game.Game;
 
-public class Healbar
+public sealed class Healbar
 {
 	private readonly RectangleShape _shape;
 	private readonly Vector _size = new(30, 5);

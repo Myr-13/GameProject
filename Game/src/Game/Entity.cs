@@ -3,9 +3,11 @@ using SFML.Graphics;
 
 namespace Game.Game;
 
-public abstract class Entity
+public class Entity
 {
-	protected World World;
+	protected readonly App App;
+	protected readonly World World;
+	protected readonly Graphics Graphics;
 	
 	public int Health;
 	public int MaxHealth;
@@ -14,19 +16,22 @@ public abstract class Entity
 	public Vector Size;
 	public bool MarkedForDeletion = false;
 
-	public Entity(World world, Vector position, Vector size)
+	public Entity(App app, Vector position, Vector size)
 	{
-		World = world;
+		App = app;
+		World = app.World;
+		Graphics = app.Graphics;
 		Position = position;
 		Size = size;
 		
 		Health = MaxHealth = 100;
 	}
 
-	public Entity(World world) : this(world, new(0, 0), new(0, 0))
+	public Entity(App app) : this(app, new(0, 0), new(0, 0))
 	{
 	}
 	
-	public abstract void Update(float deltaTime);
-	public abstract void Draw();
+	public virtual void OnUpdate(float deltaTime) {}
+	public virtual void OnDraw() {}
+	public virtual void OnDestroy() {}
 }

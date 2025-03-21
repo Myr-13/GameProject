@@ -6,7 +6,7 @@ using DotTiled.Serialization;
 
 namespace Game.Game;
 
-public class World
+public sealed class World
 {
 	public Graphics Graphics;
 	public List<Entity> Entities = new();
@@ -59,7 +59,7 @@ public class World
 	public void Draw()
 	{
 		foreach (var entity in Entities)
-			entity.Draw();
+			entity.OnDraw();
 
 		for (int x = 0; x < MapWidth; x++)
 		{
@@ -82,10 +82,13 @@ public class World
 	{
 		foreach (Entity entity in Entities.ToList())
 		{
-			entity.Update(deltaTime);
-			
+			entity.OnUpdate(deltaTime);
+
 			if (entity.MarkedForDeletion || entity.Health <= 0)
+			{
+				entity.OnDestroy();
 				Entities.Remove(entity);
+			}
 		}
 	}
 	

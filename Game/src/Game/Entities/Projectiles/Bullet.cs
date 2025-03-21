@@ -7,7 +7,7 @@ public class Bullet : Entity
 {
 	private readonly RectangleShape _shape;
 	
-	public Bullet(World world, Vector position, Vector direction) : base(world, position, new Vector(8, 8))
+	public Bullet(App app, Vector position, Vector direction) : base(app, position, new Vector(8, 8))
 	{
 		_shape = new RectangleShape(Size);
 		_shape.Position = position;
@@ -16,7 +16,7 @@ public class Bullet : Entity
 		Velocity = direction * 5F;
 	}
 	
-	public override void Update(float deltaTime)
+	public override void OnUpdate(float deltaTime)
 	{
 		Position += Velocity;
 
@@ -34,7 +34,7 @@ public class Bullet : Entity
 		}
 	}
 
-	public override void Draw()
+	public override void OnDraw()
 	{
 		_shape.Position = Position - Size / 2F;
 		World.Graphics.NativeWindow.Draw(_shape);

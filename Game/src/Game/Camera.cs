@@ -2,7 +2,7 @@
 
 namespace Game.Game;
 
-public class Camera
+public sealed class Camera
 {
 	public Vector Position = new();
 	public Vector TargetPosition = new();
