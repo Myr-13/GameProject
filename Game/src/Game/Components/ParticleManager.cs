@@ -1,7 +1,8 @@
-﻿using SFML.Graphics;
+﻿using Game.Game.Gfx.Particles;
+using SFML.Graphics;
 using SFML.System;
 
-namespace Game.Game.Gfx.Particles;
+namespace Game.Game.Components;
 
 public sealed class ParticleManager(App app) : Component(app)
 {

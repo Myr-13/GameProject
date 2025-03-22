@@ -72,7 +72,6 @@ public class Player : Entity
 		World.Graphics.NativeWindow.Draw(_shape);
 		World.Graphics.NativeWindow.Draw(_eyesShapes[0]);
 		World.Graphics.NativeWindow.Draw(_eyesShapes[1]);
-		World.Graphics.Camera.TargetPosition = Position;
-		World.Graphics.Camera.Render();
+		App.Camera.TargetPosition = Position;
 	}
 }

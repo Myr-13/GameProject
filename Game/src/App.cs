@@ -3,7 +3,7 @@ using System.Reflection;
 using Game.Engine;
 using Game.Game.Entities;
 using Game.Game;
-using Game.Game.Gfx.Particles;
+using Game.Game.Components;
 using SFML.Graphics;
 
 namespace Game;
@@ -16,6 +16,7 @@ public class App
 	
 	// Components
 	public ParticleManager ParticleManager;
+	public Camera Camera;
 
 	private void OnClose(object? sender, EventArgs args)
 	{

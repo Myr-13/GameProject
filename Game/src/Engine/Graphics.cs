@@ -9,12 +9,17 @@ public sealed class Graphics
 {
 	public RenderWindow NativeWindow = new(0);
 	public View View = new();
-	public Camera Camera = new();
+
+	private int _width;
+	private int _height;
 	private readonly Clock _clock = new();
 	private Time _deltaTime;
 	private const int Fps = 60;
-	private readonly float _frameTime = 1f / Fps;
-	
+	private readonly float _frameTime = 1F / Fps;
+
+	public int Width => _width;
+	public int Height => _height;
+
 	public delegate void WindowUpdateHandler(float deltaTime);
 	public event WindowUpdateHandler OnUpdate;
 	public delegate void WindowRenderHandler();
@@ -26,7 +31,8 @@ public sealed class Graphics
 		NativeWindow.SetFramerateLimit(Fps);
 		View.Size = new Vector2f(mode.Width, mode.Height);
 		View.Center = new Vector2f(0, 0);
-		Camera.Init(this);
+		_width = (int)mode.Width;
+		_height = (int)mode.Height;
 	}
 	
 	public void Open()
@@ -46,5 +52,10 @@ public sealed class Graphics
 			OnRender();
 			NativeWindow.Display();
 		}
+	}
+
+	public void CenterView()
+	{
+		View.Center = new Vector2f(_width / 2F, _height / 2F);
 	}
 }
